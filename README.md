@@ -1,1 +1,0 @@
-# Moksh-s-Khtoba
