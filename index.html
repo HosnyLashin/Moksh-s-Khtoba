@@ -303,6 +303,23 @@
     margin:0 0 18px;
     line-height:1.6;
   }
+  .guest-name-input{
+    width:100%;
+    padding:14px 18px;
+    border-radius:999px;
+    border:2px solid var(--purple-soft);
+    font-family:'Cairo', sans-serif;
+    font-size:1rem;
+    color:var(--ink);
+    background:var(--cream);
+    outline:none;
+    transition:border-color .25s, box-shadow .25s;
+    margin-bottom:14px;
+  }
+  .guest-name-input:focus{
+    border-color:var(--pink);
+    box-shadow:0 0 0 4px rgba(255,92,138,.15);
+  }
   .guest-textarea{
     width:100%;
     min-height:100px;
@@ -338,7 +355,7 @@
   }
   .send-guest-btn:hover{ transform:translateY(-2px); }
   .send-guest-btn:disabled{ opacity:.6; cursor:default; transform:none; }
-  .send-guest-btn:focus-visible, .guest-textarea:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
+  .send-guest-btn:focus-visible, .guest-textarea:focus-visible, .guest-name-input:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
 
   .guest-status{
     margin-top:12px;
@@ -427,12 +444,13 @@
         <p class="signoff">Congratulations to Mohamed and Shahd🤍</p>
       </div>
 
-      <!-- ===== GUESTBOOK: anonymous private message to the couple ===== -->
+      <!-- ===== GUESTBOOK: message to the couple, saved silently to a Google Sheet ===== -->
       <div class="guestbook-card">
         <h2 class="guestbook-title">اكتب كلمتك لمحمد وشهد 💌</h2>
-        <p class="guestbook-sub">اكتب رسالتك، وهيفتحلك تطبيق الإيميل بتاعك جاهز، بس دوس إرسال وخلصت 💕</p>
+        <p class="guestbook-sub">اكتب اسمك ورسالتك، وهتتبعت على طول من غير ما تسيب الصفحة 💕</p>
+        <input id="guestName" class="guest-name-input" type="text" placeholder="اسمك" />
         <textarea id="guestMessage" class="guest-textarea" placeholder="اكتب رسالتك هنا..." rows="4"></textarea>
-        <button id="sendGuestBtn" class="send-guest-btn">بعت رسالتي 💌</button>
+        <button id="sendGuestBtn" class="send-guest-btn">ابعت رسالتي 💌</button>
         <p class="guest-status" id="guestStatus" role="status" aria-live="polite"></p>
       </div>
     </div>
@@ -511,34 +529,61 @@
   }
 
   /* =========================================================
-     GUESTBOOK — anonymous message box
-     بيفتح تطبيق الإيميل بتاع الزائر، جاهز برسالته، موجّه
-     للإيميل المحدد تحت في GUESTBOOK_EMAIL
+     GUESTBOOK — name + message, saved silently to a Google Sheet
+     via a Google Apps Script Web App (no app switching, no email)
      ========================================================= */
 
-  const GUESTBOOK_EMAIL = 'mdiab3029@gmail.com';
+  const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxfrTP5IYvZ5IkLTASSog0WBknMHZSzJ82Z7luy_DJ7HgEgDtp1voecK1A6ZcKGl9ejjg/exec';
 
+  const guestNameInput = document.getElementById('guestName');
   const guestTextarea = document.getElementById('guestMessage');
   const sendGuestBtn = document.getElementById('sendGuestBtn');
   const guestStatus = document.getElementById('guestStatus');
 
   sendGuestBtn.addEventListener('click', function(){
+    const name = guestNameInput.value.trim();
     const msg = guestTextarea.value.trim();
 
-    if (!msg){
+    if (!name){
       guestStatus.style.color = '#E5484D';
-      guestStatus.textContent = 'اكتب رسالة الأول 🙂';
+      guestStatus.textContent = 'اكتب اسمك الأول 🙂';
+      guestNameInput.focus();
       return;
     }
 
-    const subject = encodeURIComponent('رسالة لمحمد وشهد 💌');
-    const body = encodeURIComponent(msg);
-    const mailtoLink = 'mailto:' + GUESTBOOK_EMAIL + '?subject=' + subject + '&body=' + body;
+    if (!msg){
+      guestStatus.style.color = '#E5484D';
+      guestStatus.textContent = 'اكتب رسالة كمان 🙂';
+      guestTextarea.focus();
+      return;
+    }
 
-    window.location.href = mailtoLink;
-
+    sendGuestBtn.disabled = true;
     guestStatus.style.color = 'var(--purple)';
-    guestStatus.textContent = 'هيتفتح تطبيق الإيميل بتاعك، دوس إرسال وخلصت 💕';
+    guestStatus.textContent = 'بيتبعت... ⏳';
+
+    const formBody = new URLSearchParams();
+    formBody.append('name', name);
+    formBody.append('message', msg);
+
+    fetch(SHEET_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody.toString()
+    })
+    .then(function(){
+      guestStatus.style.color = '#2EC4B6';
+      guestStatus.textContent = 'وصلت رسالتك، شكراً ليك 💕';
+      guestNameInput.value = '';
+      guestTextarea.value = '';
+      sendGuestBtn.disabled = false;
+    })
+    .catch(function(){
+      guestStatus.style.color = '#E5484D';
+      guestStatus.textContent = 'حصلت مشكلة، جرب تاني 🙏';
+      sendGuestBtn.disabled = false;
+    });
   });
 </script>
 </body>
