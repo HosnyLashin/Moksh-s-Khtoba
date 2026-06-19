@@ -395,7 +395,7 @@
         <circle cx="40" cy="20" r="14" stroke="#6A4C93"></circle>
       </svg>
       <h1 class="lock-title">بداية القصه💌</h1>
-      <p class="lock-sub">الدعوة دي مقفولة بكلمة سر… <br></p>
+      <p class="lock-sub">الدعوة دي مقفولة بكلمة سر… <br>كلمة السر: <strong style="color:var(--pink);">26062026</strong></p>
       <form id="lockForm" autocomplete="off">
         <input
           type="text"
@@ -469,17 +469,26 @@
     return str.replace(/\D/g, '');
   }
 
+  const CORRECT_PASSWORD = '26062026';
+
   lockForm.addEventListener('submit', function(e){
     e.preventDefault();
     const digits = normalize(passInput.value);
-    if (digits.length > 0) {
+    if (digits === CORRECT_PASSWORD) {
       unlock();
-    } else {
+    } else if (digits.length === 0) {
       lockError.textContent = 'اكتب أرقام بس 🙂';
       lockCard.classList.remove('shake');
       void lockCard.offsetWidth; // restart animation
       lockCard.classList.add('shake');
       passInput.focus();
+    } else {
+      lockError.textContent = 'كلمة السر مش صح، جرب تاني 🙂';
+      lockCard.classList.remove('shake');
+      void lockCard.offsetWidth; // restart animation
+      lockCard.classList.add('shake');
+      passInput.focus();
+      passInput.select();
     }
   });
 
