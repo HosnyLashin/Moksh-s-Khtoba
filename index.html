@@ -283,11 +283,11 @@
   .msg-delete-btn:hover{ background:#fff0f3; color:#E5484D; }
   .msg-delete-btn:disabled{ opacity:.4; cursor:default; }
   .msg-card-text{ font-size:1rem; line-height:1.85; color:#3a2c4d; margin:0 0 10px; }
-  .msg-card-time{ font-size:.78rem; color:#a090b8; direction:ltr; text-align:left; }
+  .msg-card-time{ font-size:.85rem; font-weight:700; color:#6A4C93; direction:ltr; text-align:left; }
 
   .admin-empty{
     text-align:center;
-    color:#a090b8;
+    color:#6A4C93;
     font-size:1rem;
     margin-top:30px;
   }
@@ -644,5 +644,24 @@
     });
   });
 </script>
+
+<style>
+  .made-by{
+    position:fixed; bottom:14px; left:0; right:0;
+    text-align:center; z-index:20;
+    font-family:'Cairo', sans-serif;
+    font-size:.85rem; font-weight:700;
+    color:#6A4C93;
+    pointer-events:none;
+  }
+  .made-by span{ 
+    background:rgba(255,246,236,.85);
+    backdrop-filter:blur(6px);
+    padding:5px 14px;
+    border-radius:999px;
+    box-shadow:0 2px 10px rgba(43,27,61,.08);
+  }
+</style>
+<div class="made-by"><span>Made by Hosny &amp; Akram</span></div>
 </body>
 </html>
