@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خطوبة محمد وشهد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Fredoka:wght@600;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF6EC;
+    --cream-deep:#FFEADA;
+    --ink:#2B1B3D;
+    --pink:#FF5C8A;
+    --pink-soft:#FFB3C6;
+    --orange:#FF9F45;
+    --purple:#6A4C93;
+    --purple-soft:#B9A4D6;
+    --yellow:#FFD23F;
+    --teal:#2EC4B6;
+    --shadow: 0 20px 60px rgba(43,27,61,.16);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:'Cairo', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  .blob-bg{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+  .blob{ position:absolute; border-radius:50%; filter:blur(60px); opacity:.55; animation: blobMove 16s ease-in-out infinite; }
+  .blob.b1{ width:380px; height:380px; background:var(--pink-soft); top:-100px; right:-100px; animation-delay:0s;}
+  .blob.b2{ width:320px; height:320px; background:var(--yellow); bottom:-80px; left:-80px; animation-delay:3s;}
+  .blob.b3{ width:280px; height:280px; background:var(--teal); top:40%; left:50%; opacity:.35; animation-delay:6s;}
+  @keyframes blobMove{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(30px,-40px) scale(1.12); } }
+
+  /* ================= LOCK SCREEN ================= */
+  #lock-screen{
+    position:fixed; inset:0; z-index:10;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #lock-screen.fade-out{ opacity:0; visibility:hidden; }
+
+  .lock-card{
+    position:relative; z-index:2;
+    width:100%; max-width:420px;
+    background:#fff;
+    border-radius:28px;
+    padding:42px 30px 34px;
+    text-align:center;
+    box-shadow:var(--shadow);
+    animation: cardIn .7s ease both;
+  }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(24px) scale(.97);} to{opacity:1; transform:translateY(0) scale(1);} }
+
+  .lock-card.shake{ animation: shake .45s ease; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-10px); }
+    40%{ transform:translateX(8px); }
+    60%{ transform:translateX(-6px); }
+    80%{ transform:translateX(4px); }
+  }
+
+  .rings-mini{ width:64px; height:40px; margin:0 auto 14px; display:block; }
+  .rings-mini circle{ fill:none; stroke-width:5; }
+
+  .lock-title{ font-family:'Lalezar', sans-serif; font-size:1.8rem; color:var(--pink); margin:0 0 6px; }
+  .lock-sub{ font-size:.95rem; color:#6b6178; margin:0 0 22px; line-height:1.6; }
+
+  .pass-input{
+    width:100%; padding:14px 18px; border-radius:999px;
+    border:2px solid var(--purple-soft);
+    font-family:'Cairo', sans-serif; font-size:1rem; text-align:center;
+    outline:none; color:var(--ink); background:var(--cream);
+    transition:border-color .25s, box-shadow .25s;
+  }
+  .pass-input:focus{ border-color:var(--pink); box-shadow:0 0 0 4px rgba(255,92,138,.15); }
+
+  .unlock-btn{
+    margin-top:16px; width:100%; padding:14px 18px; border:none; border-radius:999px;
+    font-family:'Cairo', sans-serif; font-weight:800; font-size:1.02rem; color:#fff;
+    background:linear-gradient(95deg, var(--pink), var(--orange));
+    cursor:pointer; transition:transform .2s, box-shadow .2s;
+    box-shadow:0 10px 24px rgba(255,92,138,.35);
+  }
+  .unlock-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(255,92,138,.45); }
+  .unlock-btn:active{ transform:translateY(0); }
+  .unlock-btn:focus-visible, .pass-input:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
+  .lock-error{ margin-top:12px; color:#E5484D; font-size:.88rem; font-weight:700; min-height:18px; }
+
+  /* ================= MAIN CONTENT ================= */
+  #main-content{
+    display:none; position:relative; z-index:1;
+    min-height:100vh; align-items:center; justify-content:center;
+    padding:60px 20px 80px;
+  }
+  #main-content.shown{ display:flex; }
+
+  .floaters{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .floater{ position:absolute; font-size:1.6rem; opacity:.85; animation: floatUp linear infinite; }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.9; } 90%{ opacity:.7; }
+    100%{ transform:translateY(-110vh) rotate(40deg); opacity:0; }
+  }
+
+  .confetti-piece{
+    position:fixed; top:-20px; z-index:5; pointer-events:none;
+    width:10px; height:14px; border-radius:2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall{ to{ transform:translateY(110vh) rotate(540deg); opacity:.2; } }
+
+  .hero{ position:relative; z-index:2; max-width:680px; width:100%; text-align:center; }
+
+  .rings-svg{ width:130px; height:80px; margin:0 auto 6px; display:block; }
+  .rings-svg circle{ fill:none; stroke-width:6; stroke-linecap:round; }
+  .ring-a, .ring-b{ stroke-dasharray:220; stroke-dashoffset:220; }
+  #main-content.revealed .ring-a{ animation: drawRing 1s ease forwards .15s; }
+  #main-content.revealed .ring-b{ animation: drawRing 1s ease forwards .45s; }
+  @keyframes drawRing{ to{ stroke-dashoffset:0; } }
+
+  .names{
+    font-family:'Fredoka', 'Lalezar', sans-serif;
+    font-size:clamp(2.4rem, 9vw, 4.4rem);
+    line-height:1.15; margin:6px 0 0; opacity:0;
+    transform:translateY(14px) scale(.92);
+  }
+  #main-content.revealed .names{ animation: popIn .7s cubic-bezier(.2,.9,.25,1.2) forwards 1.0s; }
+  @keyframes popIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
+
+  .names .name-a{ color:var(--pink); }
+  .names .heart-ico{ display:inline-block; font-size:.55em; vertical-align:middle; margin:0 4px; animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.25);} }
+  .names .name-b{ color:var(--purple); }
+
+  .occasion{ font-weight:800; color:var(--orange); letter-spacing:2px; margin-top:10px; font-size:1.1rem; opacity:0; }
+  #main-content.revealed .occasion{ animation: fadeUp .6s ease forwards 1.5s; }
+
+  .date-badge{
+    display:inline-block; margin-top:14px; background:var(--yellow); color:var(--ink);
+    padding:9px 26px; border-radius:999px; font-weight:800; font-size:.98rem; opacity:0;
+    box-shadow:0 8px 18px rgba(255,210,63,.45);
+  }
+  #main-content.revealed .date-badge{ animation: fadeUp .6s ease forwards 1.75s; }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+  .message-card{
+    margin-top:38px; background:#fff; border-radius:26px;
+    padding:38px 28px 32px; box-shadow:var(--shadow);
+    position:relative; opacity:0; transform:translateY(20px);
+  }
+  #main-content.revealed .message-card{ animation: fadeUp .7s ease forwards 2.1s; }
+
+  .quote-ico{ font-size:1.8rem; color:var(--pink-soft); margin-bottom:6px; display:block; }
+  .message-text{ font-size:1.08rem; line-height:2.05; color:#3a2c4d; margin:0; }
+  .message-text strong{ color:var(--purple); }
+  .signoff{ margin-top:22px; font-weight:800; color:var(--pink); font-size:1.05rem; }
+  .divider{ width:64px; height:4px; margin:18px auto 0; background:linear-gradient(90deg, var(--pink), var(--orange)); border-radius:4px; }
+
+  /* ================= GUESTBOOK ================= */
+  .guestbook-card{
+    margin-top:30px; background:#fff; border-radius:26px;
+    padding:34px 28px 30px; box-shadow:var(--shadow);
+    position:relative; opacity:0; transform:translateY(20px);
+  }
+  #main-content.revealed .guestbook-card{ animation: fadeUp .7s ease forwards 2.4s; }
+
+  .guestbook-title{ font-family:'Lalezar', sans-serif; font-size:1.5rem; color:var(--purple); margin:0 0 6px; }
+  .guestbook-sub{ font-size:.92rem; color:#6b6178; margin:0 0 18px; line-height:1.6; }
+
+  .guest-name-input{
+    width:100%; padding:14px 18px; border-radius:999px;
+    border:2px solid var(--purple-soft);
+    font-family:'Cairo', sans-serif; font-size:1rem; color:var(--ink);
+    background:var(--cream); outline:none;
+    transition:border-color .25s, box-shadow .25s; margin-bottom:14px;
+  }
+  .guest-name-input:focus{ border-color:var(--pink); box-shadow:0 0 0 4px rgba(255,92,138,.15); }
+
+  .guest-textarea{
+    width:100%; min-height:100px; padding:14px 16px; border-radius:18px;
+    border:2px solid var(--purple-soft);
+    font-family:'Cairo', sans-serif; font-size:1rem; color:var(--ink);
+    background:var(--cream); resize:vertical; outline:none;
+    transition:border-color .25s, box-shadow .25s;
+  }
+  .guest-textarea:focus{ border-color:var(--pink); box-shadow:0 0 0 4px rgba(255,92,138,.15); }
+
+  .send-guest-btn{
+    margin-top:14px; width:100%; padding:14px 18px; border:none; border-radius:999px;
+    font-family:'Cairo', sans-serif; font-weight:800; font-size:1rem; color:#fff;
+    background:linear-gradient(95deg, var(--purple), var(--pink));
+    cursor:pointer; transition:transform .2s, box-shadow .2s, opacity .2s;
+    box-shadow:0 10px 24px rgba(106,76,147,.3);
+  }
+  .send-guest-btn:hover{ transform:translateY(-2px); }
+  .send-guest-btn:disabled{ opacity:.6; cursor:default; transform:none; }
+  .send-guest-btn:focus-visible, .guest-textarea:focus-visible, .guest-name-input:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
+  .guest-status{ margin-top:12px; font-size:.9rem; font-weight:700; min-height:18px; }
+
+  /* ================= ADMIN PANEL ================= */
+  #admin-panel{
+    display:none;
+    position:relative; z-index:1;
+    min-height:100vh;
+    padding:40px 20px 80px;
+    flex-direction:column;
+    align-items:center;
+  }
+  #admin-panel.shown{ display:flex; }
+
+  .admin-header{
+    text-align:center;
+    margin-bottom:30px;
+    width:100%; max-width:680px;
+  }
+  .admin-title{
+    font-family:'Lalezar', sans-serif;
+    font-size:2rem;
+    color:var(--purple);
+    margin:0 0 6px;
+  }
+  .admin-sub{ color:#6b6178; font-size:.95rem; }
+
+  .admin-refresh-btn{
+    margin-top:12px;
+    padding:10px 28px;
+    border:none; border-radius:999px;
+    font-family:'Cairo', sans-serif; font-weight:800; font-size:.95rem;
+    color:#fff;
+    background:linear-gradient(95deg, var(--teal), var(--purple));
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(46,196,182,.3);
+    transition:transform .2s;
+  }
+  .admin-refresh-btn:hover{ transform:translateY(-2px); }
+
+  .admin-loading{
+    color:var(--purple); font-weight:700; font-size:1rem;
+    margin-top:20px;
+  }
+
+  .messages-grid{
+    width:100%; max-width:680px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+
+  .msg-card{
+    background:#fff;
+    border-radius:20px;
+    padding:22px 24px;
+    box-shadow:var(--shadow);
+    text-align:right;
+    animation: fadeUp .5s ease both;
+    transition: opacity .3s, transform .3s;
+  }
+  .msg-card.deleting{ opacity:0; transform:scale(.95); pointer-events:none; }
+  .msg-card-header{
+    display:flex; align-items:center;
+    justify-content:space-between; margin-bottom:6px;
+  }
+  .msg-card-name{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.15rem; color:var(--pink);
+    margin:0; display:flex; align-items:center; gap:6px;
+  }
+  .msg-delete-btn{
+    background:none; border:none; cursor:pointer;
+    font-size:1.1rem; padding:4px 8px; border-radius:8px;
+    color:#c0a8d8; transition:background .2s, color .2s;
+    line-height:1; flex-shrink:0;
+  }
+  .msg-delete-btn:hover{ background:#fff0f3; color:#E5484D; }
+  .msg-delete-btn:disabled{ opacity:.4; cursor:default; }
+  .msg-card-text{ font-size:1rem; line-height:1.85; color:#3a2c4d; margin:0 0 10px; }
+  .msg-card-time{ font-size:.85rem; font-weight:700; color:#6A4C93; direction:ltr; text-align:left; }
+
+  .admin-empty{
+    text-align:center;
+    color:#6A4C93;
+    font-size:1rem;
+    margin-top:30px;
+  }
+
+  .admin-count{
+    display:inline-block;
+    background:var(--yellow);
+    color:var(--ink);
+    border-radius:999px;
+    padding:4px 16px;
+    font-weight:800;
+    font-size:.9rem;
+    margin-top:10px;
+  }
+
+  @media (max-width:480px){
+    .message-card{ padding:30px 20px 26px; }
+    .guestbook-card{ padding:28px 20px 24px; }
+    .lock-card{ padding:34px 22px 28px; }
+    .msg-card{ padding:18px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="blob-bg">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <!-- ================= LOCK SCREEN ================= -->
+  <div id="lock-screen">
+    <div class="lock-card" id="lockCard">
+      <svg class="rings-mini" viewBox="0 0 64 40" aria-hidden="true">
+        <circle cx="24" cy="20" r="14" stroke="#FF5C8A"></circle>
+        <circle cx="40" cy="20" r="14" stroke="#6A4C93"></circle>
+      </svg>
+      <h1 class="lock-title">بداية القصه💌</h1>
+      <p class="lock-sub">الدعوة دي مقفولة بكلمة سر… <br>كلمة السر: <strong style="color:var(--pink);">26062026</strong></p>
+      <form id="lockForm" autocomplete="off">
+        <input
+          type="text"
+          id="passInput"
+          class="pass-input"
+          placeholder="اكتب أرقام هنا"
+          inputmode="numeric"
+          aria-label="تاريخ الخطوبة">
+        <button type="submit" class="unlock-btn">افتح الدعوة 🎉</button>
+        <p class="lock-error" id="lockError" role="alert" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <div id="main-content">
+    <div class="floaters" id="floaters"></div>
+    <div class="hero">
+      <svg class="rings-svg" viewBox="0 0 130 80" aria-hidden="true">
+        <circle class="ring-a" cx="48" cy="40" r="33" stroke="#FF5C8A"></circle>
+        <circle class="ring-b" cx="82" cy="40" r="33" stroke="#6A4C93"></circle>
+      </svg>
+
+      <h1 class="names" dir="ltr">
+        <span class="name-a">Mohamed</span>
+        <span class="heart-ico">💗</span>
+        <span class="name-b">Shahd</span>
+      </h1>
+
+      <p class="occasion">خطوبة</p>
+      <span class="date-badge">26 يونيو 2026</span>
+
+      <div class="message-card">
+        <span class="quote-ico">❝</span>
+        <p class="message-text">
+          في وسط الدنيا الكبيرة، فيه قلبين قرروا يمشوا الطريق مع بعض.
+          <strong>محمد وشهد</strong> ما كانوش غراب عن بعض، كانوا نصيب لقى نصيبه،
+          وقصة بدأت بإحساس صغير وكبرت لحد ما بقت أحلى ارتباط.
+          <br><br>
+          النهارده بيفتحوا أول صفحة في حكايتهم، وكل اللي حوالينهم
+          بيدعوا لهم بحياة مليانة ضحك، واستقرار، وحب يكبر يوم ورا يوم.
+          ربنا يخلّيهم لبعض، ويبارك لهم في بداية رحلتهم الجميلة 💕
+        </p>
+        <div class="divider"></div>
+        <p class="signoff">Congratulations to Mohamed and Shahd🤍</p>
+      </div>
+
+      <div class="guestbook-card">
+        <h2 class="guestbook-title">اكتب كلمتك لمحمد وشهد 💌</h2>
+        <p class="guestbook-sub">اكتب اسمك ورسالتك، وهتتبعت على طول من غير ما تسيب الصفحة 💕</p>
+        <input id="guestName" class="guest-name-input" type="text" placeholder="اسمك" />
+        <textarea id="guestMessage" class="guest-textarea" placeholder="اكتب رسالتك هنا..." rows="4"></textarea>
+        <button id="sendGuestBtn" class="send-guest-btn">ابعت رسالتي 💌</button>
+        <p class="guest-status" id="guestStatus" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ADMIN PANEL ================= -->
+  <div id="admin-panel">
+    <div class="admin-header">
+      <p style="font-size:2.2rem; margin:0 0 4px;">👀</p>
+      <h1 class="admin-title">رسايل الضيوف</h1>
+      <p class="admin-sub">كل الرسايل اللي اتبعتت لمحمد وشهد</p>
+      <span class="admin-count" id="adminCount">جاري التحميل...</span>
+      <br>
+      <button class="admin-refresh-btn" id="adminRefreshBtn">تحديث 🔄</button>
+    </div>
+    <div id="adminLoading" class="admin-loading">بيجيب الرسايل... ⏳</div>
+    <div class="messages-grid" id="messagesGrid"></div>
+  </div>
+
+<script>
+  const lockScreen   = document.getElementById('lock-screen');
+  const lockCard     = document.getElementById('lockCard');
+  const lockForm     = document.getElementById('lockForm');
+  const passInput    = document.getElementById('passInput');
+  const lockError    = document.getElementById('lockError');
+  const mainContent  = document.getElementById('main-content');
+  const adminPanel   = document.getElementById('admin-panel');
+  const floatersWrap = document.getElementById('floaters');
+
+  const GUEST_PASSWORD = '26062026';
+  const ADMIN_PASSWORD = '142025';
+  const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxfrTP5IYvZ5IkLTASSog0WBknMHZSzJ82Z7luy_DJ7HgEgDtp1voecK1A6ZcKGl9ejjg/exec';
+
+  function normalize(str){ return str.replace(/\D/g, ''); }
+
+  lockForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const digits = normalize(passInput.value);
+
+    if (digits === GUEST_PASSWORD) {
+      unlockInvite();
+    } else if (digits === ADMIN_PASSWORD) {
+      unlockAdmin();
+    } else if (digits.length === 0) {
+      showLockError('اكتب أرقام بس 🙂');
+    } else {
+      showLockError('كلمة السر مش صح، جرب تاني 🙂');
+      passInput.select();
+    }
+  });
+
+  function showLockError(msg){
+    lockError.textContent = msg;
+    lockCard.classList.remove('shake');
+    void lockCard.offsetWidth;
+    lockCard.classList.add('shake');
+    passInput.focus();
+  }
+
+  function hideLockScreen(){
+    lockScreen.classList.add('fade-out');
+    setTimeout(() => { lockScreen.style.display = 'none'; }, 650);
+  }
+
+  /* ---- Guest invite unlock ---- */
+  function unlockInvite(){
+    hideLockScreen();
+    mainContent.classList.add('shown');
+    requestAnimationFrame(() => { mainContent.classList.add('revealed'); });
+    spawnFloaters();
+    burstConfetti();
+  }
+
+  /* ---- Admin panel unlock ---- */
+  function unlockAdmin(){
+    hideLockScreen();
+    adminPanel.classList.add('shown');
+    loadMessages();
+  }
+
+  /* ---- Floating emojis ---- */
+  function spawnFloaters(){
+    const emojis = ['💖','✨','🎈','🌸','💫'];
+    for (let i = 0; i < 10; i++){
+      const el = document.createElement('span');
+      el.className = 'floater';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.bottom = '-40px';
+      el.style.animationDuration = (10 + Math.random() * 8) + 's';
+      el.style.animationDelay = (Math.random() * 6) + 's';
+      floatersWrap.appendChild(el);
+    }
+  }
+
+  /* ---- Confetti ---- */
+  function burstConfetti(){
+    const colors = ['#FF5C8A','#FF9F45','#FFD23F','#6A4C93','#2EC4B6'];
+    for (let i = 0; i < 46; i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (2.4 + Math.random() * 1.6) + 's';
+      piece.style.animationDelay = (Math.random() * 0.4) + 's';
+      document.body.appendChild(piece);
+      piece.addEventListener('animationend', () => piece.remove());
+    }
+  }
+
+  /* ================= ADMIN: load messages from Sheet ================= */
+  const adminLoading  = document.getElementById('adminLoading');
+  const messagesGrid  = document.getElementById('messagesGrid');
+  const adminCount    = document.getElementById('adminCount');
+  const adminRefresh  = document.getElementById('adminRefreshBtn');
+
+  adminRefresh.addEventListener('click', loadMessages);
+
+  function loadMessages(){
+    adminLoading.style.display = 'block';
+    messagesGrid.innerHTML = '';
+    adminCount.textContent = 'جاري التحميل...';
+
+    fetch(SHEET_WEBAPP_URL, { method: 'GET' })
+      .then(res => res.json())
+      .then(data => {
+        adminLoading.style.display = 'none';
+
+        if (!data || data.length === 0){
+          adminCount.textContent = 'لا توجد رسائل بعد';
+          messagesGrid.innerHTML = '<p class="admin-empty">مفيش رسايل لسه 💌<br>لما الناس تبعت، هتظهر هنا</p>';
+          return;
+        }
+
+        // newest first
+        const sorted = [...data].reverse();
+        adminCount.textContent = sorted.length + ' رسالة 💌';
+
+        sorted.forEach((item, i) => {
+          const card = document.createElement('div');
+          card.className = 'msg-card';
+          card.style.animationDelay = (i * 0.07) + 's';
+
+          const timeStr = item.time ? new Date(item.time).toLocaleString('ar-EG') : '';
+
+          card.innerHTML = `
+            <div class="msg-card-header">
+              <p class="msg-card-name">💗 ${escapeHtml(item.name || 'مجهول')}</p>
+              <button class="msg-delete-btn" title="حذف الرسالة" data-row="${item.row}">🗑️</button>
+            </div>
+            <p class="msg-card-text">${escapeHtml(item.message || '')}</p>
+            ${timeStr ? `<p class="msg-card-time">${timeStr}</p>` : ''}
+          `;
+
+          // delete handler
+          card.querySelector('.msg-delete-btn').addEventListener('click', function(){
+            const btn = this;
+            const row = btn.dataset.row;
+            if (!confirm('تمسح الرسالة دي؟')) return;
+
+            btn.disabled = true;
+            card.classList.add('deleting');
+
+            const body = new URLSearchParams();
+            body.append('action', 'delete');
+            body.append('row', row);
+
+            fetch(SHEET_WEBAPP_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: body.toString()
+            })
+            .then(() => {
+              setTimeout(() => {
+                card.remove();
+                // update count
+                const remaining = messagesGrid.querySelectorAll('.msg-card').length;
+                adminCount.textContent = remaining > 0 ? remaining + ' رسالة 💌' : 'لا توجد رسائل بعد';
+                if (remaining === 0){
+                  messagesGrid.innerHTML = '<p class="admin-empty">مفيش رسايل لسه 💌<br>لما الناس تبعت، هتظهر هنا</p>';
+                }
+              }, 300);
+            })
+            .catch(() => {
+              card.classList.remove('deleting');
+              btn.disabled = false;
+              alert('مقدرناش نمسح، جرب تاني 🙏');
+            });
+          });
+
+          messagesGrid.appendChild(card);
+        });
+      })
+      .catch(() => {
+        adminLoading.style.display = 'none';
+        adminCount.textContent = 'حصل خطأ';
+        messagesGrid.innerHTML = '<p class="admin-empty">مقدرناش نجيب الرسايل 😔<br>تأكد إن الـ Apps Script اتعمله Deploy صح وجرب تاني</p>';
+      });
+  }
+
+  function escapeHtml(str){
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ================= GUESTBOOK: send message ================= */
+  const guestNameInput = document.getElementById('guestName');
+  const guestTextarea  = document.getElementById('guestMessage');
+  const sendGuestBtn   = document.getElementById('sendGuestBtn');
+  const guestStatus    = document.getElementById('guestStatus');
+
+  sendGuestBtn.addEventListener('click', function(){
+    const name = guestNameInput.value.trim();
+    const msg  = guestTextarea.value.trim();
+
+    if (!name){
+      guestStatus.style.color = '#E5484D';
+      guestStatus.textContent = 'اكتب اسمك الأول 🙂';
+      guestNameInput.focus();
+      return;
+    }
+    if (!msg){
+      guestStatus.style.color = '#E5484D';
+      guestStatus.textContent = 'اكتب رسالة كمان 🙂';
+      guestTextarea.focus();
+      return;
+    }
+
+    sendGuestBtn.disabled = true;
+    guestStatus.style.color = 'var(--purple)';
+    guestStatus.textContent = 'بيتبعت... ⏳';
+
+    const formBody = new URLSearchParams();
+    formBody.append('name', name);
+    formBody.append('message', msg);
+
+    fetch(SHEET_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody.toString()
+    })
+    .then(function(){
+      guestStatus.style.color = '#2EC4B6';
+      guestStatus.textContent = 'وصلت رسالتك، شكراً ليك 💕';
+      guestNameInput.value = '';
+      guestTextarea.value = '';
+      sendGuestBtn.disabled = false;
+    })
+    .catch(function(){
+      guestStatus.style.color = '#E5484D';
+      guestStatus.textContent = 'حصلت مشكلة، جرب تاني 🙏';
+      sendGuestBtn.disabled = false;
+    });
+  });
+</script>
+
+<style>
+  .made-by{
+    position:fixed; bottom:14px; left:0; right:0;
+    text-align:center; z-index:20;
+    font-family:'Cairo', sans-serif;
+    font-size:.85rem; font-weight:700;
+    color:#6A4C93;
+    pointer-events:none;
+  }
+  .made-by span{ 
+    background:rgba(255,246,236,.85);
+    backdrop-filter:blur(6px);
+    padding:5px 14px;
+    border-radius:999px;
+    box-shadow:0 2px 10px rgba(43,27,61,.08);
+  }
+</style>
+<div class="made-by"><span>Made by Hosny &amp; Akram</span></div>
+</body>
+</html>
